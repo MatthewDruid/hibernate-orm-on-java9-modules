@@ -6,23 +6,24 @@ import javax.persistence.Id;
 @Entity
 public class Address {
 
-    private long id;
+	@Id
+    private Integer id;
+
     private String name;
 
     Address() {
     }
 
-    public Address(long id, String name) {
+    public Address(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    @Id
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -34,3 +35,4 @@ public class Address {
         this.name = name;
     }
 }
+

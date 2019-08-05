@@ -1,3 +1,5 @@
+Base on https://github.com/gunnarmorling/hibernate-orm-on-java9-modules
+
 # Hibernate ORM 5 as Java 9 automatic modules
 
 A simple test bed for using Hibernate ORM 5 as (automatic) JPMS modules.

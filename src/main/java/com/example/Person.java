@@ -9,25 +9,28 @@ import javax.persistence.OneToOne;
 @Entity
 public class Person {
 
-    private long id;
+	@Id
+    private Integer id;
+
     private String name;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Address address;
 
     Person() {
     }
 
-    public Person(long id, String name, Address address) {
+    public Person(Integer id, String name, Address address) {
         this.id = id;
         this.name = name;
         this.address = address;
     }
 
-    @Id
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -39,7 +42,6 @@ public class Person {
         this.name = name;
     }
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     public Address getAddress() {
         return address;
     }
@@ -48,3 +50,4 @@ public class Person {
         this.address = address;
     }
 }
+

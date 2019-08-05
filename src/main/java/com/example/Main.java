@@ -7,11 +7,12 @@ import javax.persistence.Persistence;
 public class Main {
 
     public static void main(String[] args) {
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory( "templatePU" );
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("templatePU");
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        Person person = new Person( 1L, "Bob", new Address( 1L, "Main Street" ) );
+        Person person = new Person( 1, "Bob", new Address( 1, "Main Street" ) );
+
         entityManager.persist( person );
         entityManager.getTransaction().commit();
         entityManager.close();
