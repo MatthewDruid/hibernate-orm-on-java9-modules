@@ -12,9 +12,12 @@ import javax.persistence.spi.PersistenceUnitInfo;
 import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
 
+import com.example.Address;
+import com.example.Person;
+
 public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
 
-	private static String JPA_VERSION = "2.2";
+	private static String JPA_VERSION = "2.1";
 	private String persistenceUnitName = "testPU";
 	private PersistenceUnitTransactionType transactionType = PersistenceUnitTransactionType.RESOURCE_LOCAL;
 	private List<String> managedClassNames = new ArrayList<String>();
@@ -22,11 +25,13 @@ public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
 	private Properties properties;
 	private DataSource jtaDataSource;
 	private DataSource nonjtaDataSource;
-	private List<ClassTransformer> transformers = new ArrayList<ClassTransformer>();
+	private final List<ClassTransformer> transformers = new ArrayList<ClassTransformer>();
+	private String persistenceProviderClassName;
 
-	public TestPersistenceUnitInfo() {
-		this.managedClassNames.add("com.example.Address");
-		this.managedClassNames.add("com.example.Person");
+	public TestPersistenceUnitInfo(String provider) {
+		this.persistenceProviderClassName = provider;
+		this.managedClassNames.add(Address.class.getName());
+		this.managedClassNames.add(Person.class.getName());
 
 		this.properties = new Properties();
 		//this.properties.put("javax.persistence.jdbc.driver", "org.hsqldb.jdbc.JDBCDriver");
@@ -38,6 +43,7 @@ public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
 
 	@Override
 	public void addTransformer(ClassTransformer arg0) {
+		this.transformers.add(arg0);
 	}
 
 	@Override
@@ -47,7 +53,7 @@ public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
 
 	@Override
 	public ClassLoader getClassLoader() {
-		return null;
+		return Address.class.getClassLoader();
 	}
 
 	@Override
@@ -82,7 +88,7 @@ public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
 
 	@Override
 	public String getPersistenceProviderClassName() {
-		return null;
+		return this.persistenceProviderClassName;
 	}
 
 	@Override
@@ -107,7 +113,7 @@ public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
 
 	@Override
 	public SharedCacheMode getSharedCacheMode() {
-		return null;
+		return SharedCacheMode.UNSPECIFIED;
 	}
 
 	@Override
@@ -117,7 +123,7 @@ public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
 
 	@Override
 	public ValidationMode getValidationMode() {
-		return null;
+		return ValidationMode.AUTO;
 	}
 }
 

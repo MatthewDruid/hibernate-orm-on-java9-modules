@@ -6,7 +6,6 @@ import java.util.ServiceLoader;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.spi.PersistenceProvider;
 
 import com.example.persistence.TestPersistenceUnitInfo;
@@ -23,26 +22,32 @@ public class Main {
 			System.exit(-1);
 		}
 
-        EntityManagerFactory entityManagerFactory = optionalProvider.get().createContainerEntityManagerFactory(new TestPersistenceUnitInfo(), new HashMap<String, String>());
+		PersistenceProvider provider = optionalProvider.get();
+
+        EntityManagerFactory entityManagerFactory = provider.createContainerEntityManagerFactory(new TestPersistenceUnitInfo(provider.getClass().getName()), new HashMap<String, Object>());
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        entityManager.getTransaction().begin();
-        Person person = new Person( 1, "Bob", new Address( 1, "Main Street" ) );
-        entityManager.persist( person );
-        entityManager.getTransaction().commit();
-        entityManager.close();
 
-        entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        Person bob = entityManager.find( Person.class, 1L );
 
-        assert bob != null;
-        assert bob.getName().equals( "Bob" );
-        assert bob.getAddress().getName().equals( "Main Street" );
+        //Person person = new Person( 1, "Bob", new Address( 1, "Main Street" ) );
+        //entityManager.persist( person );
 
         entityManager.getTransaction().commit();
         entityManager.close();
 
-        entityManagerFactory.close();
+//      entityManager = entityManagerFactory.createEntityManager();
+//      entityManager.getTransaction().begin();
+//
+//      Person bob = entityManager.find( Person.class, 1L );
+//
+//      assert bob != null;
+//      assert bob.getName().equals( "Bob" );
+//      assert bob.getAddress().getName().equals( "Main Street" );
+//
+//      entityManager.getTransaction().commit();
+//      entityManager.close();
+//
+//      entityManagerFactory.close();
     }
 }

@@ -26,15 +26,19 @@ public class JpaTest {
 		if (optionalProvider.isPresent()) {
 			PersistenceProvider provider = optionalProvider.get();
 
-			EntityManagerFactory factory = provider.createContainerEntityManagerFactory(new TestPersistenceUnitInfo(), new HashMap<String, String>());
-
+			EntityManagerFactory factory = provider.createContainerEntityManagerFactory(new TestPersistenceUnitInfo(provider.getClass().getSimpleName()), new HashMap<String, Object>());
+			
 			EntityManager em = factory.createEntityManager();
 
 			em.getTransaction().begin();
 	
-			Person person = new Person(1, "TEST", new Address(1, "TEST"));
+			//Person person = new Person(1, "TEST", new Address(1, "TEST"));
 	
-			em.persist(person);
+			//em.persist(person);
+			
+			Address address = new Address(1, "TEST");
+
+			em.persist(address);
 	
 			em.getTransaction().commit();
 	
