@@ -2,39 +2,45 @@ package com.example.tests;
 
 import org.junit.jupiter.api.*;
 
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.ServiceLoader;
+import javax.persistence.spi.PersistenceProvider;
+
 import javax.persistence.*;
 
 import com.example.Address;
 import com.example.Person;
+import com.example.persistence.TestPersistenceUnitInfo;
 
 public class JpaTest {
 
 	@Test
-	public void findClassByName() throws Exception {
-		//Object derby = Class.forName("org.apache.derby.jdbc.EmbeddedDriver").getDeclaredConstructor().newInstance();
-		//Object postgresql = Class.forName("org.postgresql.Driver").getDeclaredConstructor().newInstance();
-		Object hsqldb = Class.forName("org.hsqldb.jdbc.JDBCDriver").getDeclaredConstructor().newInstance();
+	public void testServiceLoader() throws Exception {
+		ServiceLoader<PersistenceProvider> loader = ServiceLoader.load(PersistenceProvider.class);
 
-		//System.out.println(derby.getClass().getName());
-		//System.out.println(postgresql.getClass().getName());
-		System.out.println(hsqldb.getClass().getName());
-	}
+		Optional<PersistenceProvider> optionalProvider = loader.findFirst();
 
-	@Test
-	public void setUp() throws Exception {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("templatePU");
-		EntityManager em = factory.createEntityManager();
+		Assertions.assertTrue(optionalProvider.isPresent());
 
-		em.getTransaction().begin();
+		if (optionalProvider.isPresent()) {
+			PersistenceProvider provider = optionalProvider.get();
 
-		Address address = new Address(1, "TEST");
-		Person person = new Person(1, "TEST", address);
+			EntityManagerFactory factory = provider.createContainerEntityManagerFactory(new TestPersistenceUnitInfo(), new HashMap<String, String>());
 
-		em.persist(person);
-
-		em.getTransaction().commit();
-
-		em.close();
+//			EntityManager em = factory.createEntityManager();
+//	
+//			em.getTransaction().begin();
+//	
+//			Address address = new Address(1, "TEST");
+//			Person person = new Person(1, "TEST", address);
+//	
+//			em.persist(person);
+//	
+//			em.getTransaction().commit();
+//	
+//			em.close();
+		}
 	}
 }
 

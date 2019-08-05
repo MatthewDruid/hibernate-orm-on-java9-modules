@@ -1,13 +1,29 @@
 package com.example;
 
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.ServiceLoader;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.spi.PersistenceProvider;
+
+import com.example.persistence.TestPersistenceUnitInfo;
 
 public class Main {
 
     public static void main(String[] args) {
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("templatePU");
+		ServiceLoader<PersistenceProvider> loader = ServiceLoader.load(PersistenceProvider.class);
+
+		Optional<PersistenceProvider> optionalProvider = loader.findFirst();
+
+		if (optionalProvider.isEmpty()) {
+			System.err.println("No javax.persistence.spi.PersistenceProvider found");
+			System.exit(-1);
+		}
+
+        EntityManagerFactory entityManagerFactory = optionalProvider.get().createContainerEntityManagerFactory(new TestPersistenceUnitInfo(), new HashMap<String, String>());
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
