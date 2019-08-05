@@ -28,18 +28,17 @@ public class JpaTest {
 
 			EntityManagerFactory factory = provider.createContainerEntityManagerFactory(new TestPersistenceUnitInfo(), new HashMap<String, String>());
 
-//			EntityManager em = factory.createEntityManager();
-//	
-//			em.getTransaction().begin();
-//	
-//			Address address = new Address(1, "TEST");
-//			Person person = new Person(1, "TEST", address);
-//	
-//			em.persist(person);
-//	
-//			em.getTransaction().commit();
-//	
-//			em.close();
+			EntityManager em = factory.createEntityManager();
+
+			em.getTransaction().begin();
+	
+			Person person = new Person(1, "TEST", new Address(1, "TEST"));
+	
+			em.persist(person);
+	
+			em.getTransaction().commit();
+	
+			em.close();
 		}
 	}
 }

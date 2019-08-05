@@ -26,12 +26,14 @@ public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
 
 	public TestPersistenceUnitInfo() {
 		this.managedClassNames.add("com.example.Address");
-		this.managedClassNames.add("com.example.Persion");
+		this.managedClassNames.add("com.example.Person");
 
 		this.properties = new Properties();
-		this.properties.put("javax.persistence.jdbc.driver", "org.hsqldb.jdbc.JDBCDriver");
-		this.properties.put("javax.persistence.jdbc.url", "jdbc:hsqldb:mem:myDB");
-		this.properties.put("javax.persistence.jdbc.user", "matthewdruid");
+		//this.properties.put("javax.persistence.jdbc.driver", "org.hsqldb.jdbc.JDBCDriver");
+		this.properties.put("javax.persistence.jdbc.driver", "org.postgresql.Driver");
+		//this.properties.put("javax.persistence.jdbc.url", "jdbc:hsqldb:mem:myDB");
+		this.properties.put("javax.persistence.jdbc.url", "jdbc:postgresql:hojm");
+		this.properties.put("javax.persistence.jdbc.user", "hojm");
 	}
 
 	@Override
@@ -40,7 +42,7 @@ public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
 
 	@Override
 	public boolean excludeUnlistedClasses() {
-		return true;
+		return false;
 	}
 
 	@Override
