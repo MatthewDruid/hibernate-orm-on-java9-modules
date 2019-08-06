@@ -68,7 +68,7 @@ public class TestPersistenceUnitInfo implements PersistenceUnitInfo {
 
 	@Override
 	public List<String> getManagedClassNames() {
-		return null;
+		return this.managedClassNames;
 	}
 
 	@Override
