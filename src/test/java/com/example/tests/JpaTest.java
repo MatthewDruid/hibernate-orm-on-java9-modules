@@ -2,11 +2,11 @@ package com.example.tests;
 
 import org.junit.jupiter.api.*;
 
-import java.util.HashMap;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.ServiceLoader;
 import javax.persistence.spi.PersistenceProvider;
-
+import javax.persistence.spi.PersistenceUnitInfo;
 import javax.persistence.*;
 
 import com.example.Address;
@@ -26,17 +26,25 @@ public class JpaTest {
 		if (optionalProvider.isPresent()) {
 			PersistenceProvider provider = optionalProvider.get();
 
-			EntityManagerFactory factory = provider.createContainerEntityManagerFactory(new TestPersistenceUnitInfo(provider.getClass().getSimpleName()), new HashMap<String, Object>());
+			PersistenceUnitInfo persistenceUnitInfo = new TestPersistenceUnitInfo(provider.getClass().getSimpleName());
+			Properties map = new Properties();
+
+			map.clear();
+			map.setProperty("javax.persistence.schema-generation.database.action", "create");
+			provider.generateSchema(persistenceUnitInfo, map);
+
+			map.clear();
+			EntityManagerFactory factory = provider.createContainerEntityManagerFactory(persistenceUnitInfo, map);
 			
 			EntityManager em = factory.createEntityManager();
 
 			em.getTransaction().begin();
 	
-			//Person person = new Person(1, "TEST", new Address(1, "TEST"));
+			Person person = new Person(1, "TEST", new Address(1, "TEST"));
 	
-			//em.persist(person);
+			em.persist(person);
 			
-			Address address = new Address(1, "TEST");
+			Address address = new Address(2, "TEST");
 
 			em.persist(address);
 	
